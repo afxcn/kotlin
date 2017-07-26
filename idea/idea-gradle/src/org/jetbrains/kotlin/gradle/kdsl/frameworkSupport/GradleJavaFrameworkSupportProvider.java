@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jetbrains.plugins.gradle.frameworkSupport;
+package org.jetbrains.kotlin.gradle.kdsl.frameworkSupport;
 
 import com.intellij.framework.FrameworkTypeEx;
 import com.intellij.framework.addSupport.FrameworkSupportInModuleProvider;
@@ -63,9 +63,10 @@ public class GradleJavaFrameworkSupportProvider extends GradleFrameworkSupportPr
                          @NotNull ModifiableModelsProvider modifiableModelsProvider,
                          @NotNull BuildScriptDataBuilder buildScriptData) {
     buildScriptData
-      .addPluginDefinition("apply plugin: 'java'")
-      .addPropertyDefinition("sourceCompatibility = 1.8")
+      .addPluginDefinition("plugin(\"java\")")
+      // TODO: in gradle > 4.0 it is just 'java { ... }'
+      .addOther("configure<JavaPluginConvention> {\n    sourceCompatibility = JavaVersion.VERSION_1_8\n}")
       .addRepositoriesDefinition("mavenCentral()")
-      .addDependencyNotation("testCompile group: 'junit', name: 'junit', version: '4.12'");
+      .addDependencyNotation("testCompile(\"junit\", \"junit\", \"4.12\")");
   }
 }
